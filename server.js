@@ -5,8 +5,8 @@ const app = express();
 
 const db = require("./app/models");
 var corsOptions = {
-    // origin:
-    origin: "http://localhost:4200"
+    origin: "http://nodejs-carfans-backend.herokuapp.com"
+    //origin: "http://localhost:4200"
 }
 
 db.mongoose
