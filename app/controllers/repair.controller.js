@@ -6,6 +6,7 @@ exports.create = (req, res) => {
 
     //Create a new repair
     const repair = new db.repair({
+        car_id: req.body.car_id,
         subject: req.body.subject,
         description: req.body.description,
         isMechanicalProblem: req.body.isMechanicalProblem ? req.body.isMechanicalProblem : false,

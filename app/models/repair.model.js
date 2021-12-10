@@ -4,6 +4,7 @@ const { mongoose } = require(".");
 module.exports = mongoose => {
     var schema = mongoose.Schema(
         {
+            car_id: String,
           subject: String,
           description: String,
           isMechanicalProblem: Boolean,
