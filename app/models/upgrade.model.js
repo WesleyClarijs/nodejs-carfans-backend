@@ -9,10 +9,10 @@ module.exports = mongoose => {
           costs: Number,
           isDone: Boolean,
           date: Date,
-          car: {
-            type: Schema.Types.ObjectId,
-            ref: 'car'
-        }
+        //   car: {
+        //     type: Schema.Types.ObjectId,
+        //     ref: 'car'
+        //}
         },
         { timestaps: true}
     );

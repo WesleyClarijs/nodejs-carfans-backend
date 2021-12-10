@@ -13,10 +13,10 @@ module.exports = mongoose => {
               productionYear: Number,
               isCurrentlyDriveable: Boolean,
               isDailyCar: Boolean,  
-              user: {
-                  type: Schema.Types.ObjectId,
-                  ref: 'user'
-              }
+            //   user: {
+            //       type: Schema.Types.ObjectId,
+            //       ref: 'user'
+            //   }
             },
             { timestaps: true}
         );
