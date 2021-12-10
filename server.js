@@ -4,10 +4,10 @@ const cors = require("cors");
 const app = express();
 
 const db = require("./app/models");
-var corsOptions = {
-    origin: "http://nodejs-carfans-backend.herokuapp.com/"
-    //origin: "http://localhost:4200"
-}
+// var corsOptions = {
+//     origin: "http://nodejs-carfans-backend.herokuapp.com/"
+//     //origin: "http://localhost:4200"
+// }
 
 db.mongoose
     .connect(db.url, {
@@ -31,7 +31,7 @@ app.use((req, res, next) => {
     next();
     });
 
-app.use(cors(corsOptions));
+// app.use(cors(corsOptions));
 
 app.use(express.json());
 
