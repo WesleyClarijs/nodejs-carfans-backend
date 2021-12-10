@@ -1,3 +1,4 @@
+const { Schema } = require("mongoose");
 const { mongoose } = require(".");
 
 module.exports = mongoose => {
@@ -11,7 +12,11 @@ module.exports = mongoose => {
               horsepower: Number,
               productionYear: Number,
               isCurrentlyDriveable: Boolean,
-              isDailyCar: Boolean  
+              isDailyCar: Boolean,  
+              user: {
+                  type: Schema.Types.ObjectId,
+                  ref: 'user'
+              }
             },
             { timestaps: true}
         );

@@ -3,10 +3,11 @@ const { mongoose } = require(".");
 module.exports = mongoose => {
     var schema = mongoose.Schema(
             {
-              userName: String,  
+              userName: { type: String, required: false},
+              password: { type: String, required: false},  
               firstName: String,
               lastName: String,
-              emailAddress: String,
+              emailAddress: { type: String, required: false},
               dateOfBirth: String,
               gender: String,
               country: String,
