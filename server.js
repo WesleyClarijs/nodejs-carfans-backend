@@ -5,7 +5,7 @@ const app = express();
 
 const db = require("./app/models");
 var corsOptions = {
-    origin: "http://nodejs-carfans-backend.herokuapp.com"
+    origin: "http://nodejs-carfans-backend.herokuapp.com/"
     //origin: "http://localhost:4200"
 }
 
@@ -23,13 +23,13 @@ db.mongoose
     });
 
 // Add Access Control Allow Origin headers
-// app.use((req, res, next) => {
-//     res.header("Access-Control-Allow-Origin", "*");
-//     res.header("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE");
-//     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
-//     res.header("Access-Control-Allow-Headers", "append,delete,entries,foreach,get,has,keys,set,values,Authorization")
-//     next();
-//     });
+app.use((req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+    res.header("Access-Control-Allow-Headers", "append,delete,entries,foreach,get,has,keys,set,values,Authorization")
+    next();
+    });
 
 app.use(cors(corsOptions));
 
