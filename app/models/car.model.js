@@ -4,6 +4,7 @@ const { mongoose } = require(".");
 module.exports = mongoose => {
     var schema = mongoose.Schema(
             {
+              user_id: String,
               brand: String,
               model: String,
               colour: String,
@@ -13,10 +14,6 @@ module.exports = mongoose => {
               productionYear: Number,
               isCurrentlyDriveable: Boolean,
               isDailyCar: Boolean,  
-            //   user: {
-            //       type: Schema.Types.ObjectId,
-            //       ref: 'user'
-            //   }
             },
             { timestaps: true}
         );

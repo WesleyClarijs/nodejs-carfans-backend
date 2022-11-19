@@ -119,7 +119,7 @@ exports.delete = (req, res) => {
     //AUTHENTICATION
 exports.login = (req, res) => {
         Users.findOne({
-          emailaddress: req.body.emailaddress
+          emailAddress: req.body.email
         }).exec((err, user) => {
           if (err) {
             res.status(500)
@@ -163,6 +163,8 @@ exports.login = (req, res) => {
               accessToken: token,
             });
         });
+        console.log(req.body)
+        console.log(user)
       },
     
     exports.validateToken = (req, res, next) => {

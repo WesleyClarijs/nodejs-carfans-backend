@@ -12,6 +12,7 @@ exports.create = (req, res) => {
 
     //Create a new car
     const car = new db.car({
+        user_id: req.body.user_id,
         brand: req.body.brand,
         model: req.body.model,
         colour: req.body.colour,
