@@ -40,11 +40,14 @@ exports.create = (req, res) => {
 
 //Retreive all Cars from the database
 exports.findAll = (req, res) => {
+    console.log('findAll');
     Cars.find()
         .then(data => {
-            res.send(data);
+            console.log('returning data', data)
+            res.status(200).json(data);
         })
         .catch(err => {
+            console.log('Error!, err.message')
             res.status(500).send({
                 message: 
                     err.message || "Some error occured while retreiving all cars!"

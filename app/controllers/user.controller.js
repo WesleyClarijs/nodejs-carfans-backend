@@ -164,7 +164,7 @@ exports.login = (req, res) => {
             });
         });
         console.log(req.body)
-        console.log(user)
+        console.log(res)
       },
     
     exports.validateToken = (req, res, next) => {
