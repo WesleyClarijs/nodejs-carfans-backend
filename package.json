@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "Node.js Restful API for Angular Project",
   "main": "server.js",
-  
   "keywords": [
     "nodejs",
     "express",
