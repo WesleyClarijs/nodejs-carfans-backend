@@ -14,10 +14,6 @@ module.exports = (mongoose) => {
       costs: Number,
       solution: String,
       problemSolvedAt: Date,
-      //   car: {
-      //       type: Schema.Types.ObjectId,
-      //       ref: 'car'
-      //   }
     },
     { timestaps: true }
   );

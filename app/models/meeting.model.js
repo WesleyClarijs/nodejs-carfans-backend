@@ -7,9 +7,7 @@ module.exports = (mongoose) => {
       location: String,
       dateAndTime: Date,
       organisator: String,
-      registeredCars: {
-        type: String,
-      },
+      registeredCars: [String]
     },
     { timestaps: true }
   );

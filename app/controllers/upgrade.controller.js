@@ -7,6 +7,7 @@ exports.create = (req, res) => {
     //Create a new upgrade
     const upgrade = new db.upgrade({
         car_id: req.body.car_id,
+        user_id: req.body.user_id,
         subject: req.body.subject,
         description: req.body.description,
         category: req.body.category,

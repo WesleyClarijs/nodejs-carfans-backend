@@ -1,4 +1,5 @@
 const { mongoose } = require(".");
+const carModel = require("./car.model");
 
 module.exports = mongoose => {
     var schema = mongoose.Schema(
@@ -11,6 +12,7 @@ module.exports = mongoose => {
               dateOfBirth: String,
               gender: String,
               country: String,
+              cars: { type: [carModel.Schema], default: [] },
             },
             { timestaps: true}
         );
