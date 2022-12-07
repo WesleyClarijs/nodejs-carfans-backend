@@ -4,16 +4,12 @@ const { mongoose } = require(".");
 module.exports = (mongoose) => {
   var schema = mongoose.Schema(
     {
-      user_id: String,
-      brand: String,
-      model: String,
-      colour: String,
-      licensePlate: String,
-      mileage: Number,
-      horsepower: Number,
-      productionYear: Number,
-      isCurrentlyDriveable: Boolean,
-      isDailyCar: Boolean,
+      location: String,
+      dateAndTime: Date,
+      organisator: String,
+      registeredCars: {
+        type: String,
+      },
     },
     { timestaps: true }
   );
@@ -24,6 +20,6 @@ module.exports = (mongoose) => {
     return object;
   });
 
-  const Car = mongoose.model("car", schema);
-  return Car;
+  const Meeting = mongoose.model("meeting", schema);
+  return Meeting;
 };
