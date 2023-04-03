@@ -2,7 +2,8 @@ const db = require("../models");
 const Repairs = db.repair;
 
 //Create and save a new repair
-exports.create = (req, res) => {
+module.exports = {
+async create(req, res,next) {
   //Create a new repair
   const repair = new db.repair({
     car_id: req.body.car_id,
@@ -20,7 +21,7 @@ exports.create = (req, res) => {
   });
 
   //Save repair in the database
-  repair
+  await repair
     .save(repair)
     .then((data) => {
       res.send(data);
@@ -32,11 +33,11 @@ exports.create = (req, res) => {
           "Some error occured while adding the repair to the database!",
       });
     });
-};
+},
 
 //Retreive all repairs from the database
-exports.findAll = (req, res) => {
-  Repairs.find()
+async findAll(req, res, next){
+  await Repairs.find()
     .then((data) => {
       res.send(data);
     })
@@ -46,13 +47,13 @@ exports.findAll = (req, res) => {
           err.message || "Some error occured while retreiving all repairs!",
       });
     });
-};
+},
 
 //Find a repair by ID
-exports.findOne = (req, res) => {
+async findOne(req, res, next){
   const id = req.params.id;
 
-  Repairs.findById(id)
+  await Repairs.findById(id)
     .then((data) => {
       if (!data)
         res.status(404).send({ message: "Repair not found with id " + id });
@@ -65,10 +66,10 @@ exports.findOne = (req, res) => {
           message: "Error retreiving Repair with id " + id + " from database!",
         });
     });
-};
+},
 
 //Update a repair by ID
-exports.update = (req, res) => {
+async update(req, res, next){
   if (!req.body) {
     return res.status(400).send({
       message: "Data to update can not be empty. Nothing to update!",
@@ -77,7 +78,7 @@ exports.update = (req, res) => {
 
   const id = req.params.id;
 
-  Repairs.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
+  await Repairs.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
     .then((data) => {
       if (!data) {
         res.status(404).send({
@@ -90,13 +91,13 @@ exports.update = (req, res) => {
         message: "Error updating repair with id " + id + "in database!",
       });
     });
-};
+},
 
 //Delete a repair by ID
-exports.delete = (req, res) => {
+async delete(req, res){
   const id = req.params.id;
 
-  Repairs.findByIdAndRemove(id)
+  await Repairs.findByIdAndRemove(id)
     .then((data) => {
       if (!data) {
         res.status(404).send({
@@ -117,4 +118,5 @@ exports.delete = (req, res) => {
           "! This is a problem with the database connection!",
       });
     });
-};
+},
+}

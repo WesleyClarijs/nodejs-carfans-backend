@@ -2,7 +2,8 @@ const db = require("../models");
 const Upgrades = db.upgrade;
 
 //Create and save a new upgrade
-exports.create = (req, res) => {
+module.exports = {
+async create(req, res){
 
     //Create a new upgrade
     const upgrade = new db.upgrade({
@@ -17,7 +18,7 @@ exports.create = (req, res) => {
     });
 
     //Save upgrade in the database
-    upgrade
+    await upgrade
         .save(upgrade)
         .then(data => {
             res.send(data);
@@ -28,11 +29,11 @@ exports.create = (req, res) => {
                 err.message || "Some error occured while adding the upgrade to the database!"
             });
         });
-    };
+    },
 
     //Retreive all upgrades from the database
-exports.findAll = (req, res) => {
-    Upgrades.find()
+async findAll(req, res){
+    await Upgrades.find()
         .then(data => {
             res.send(data);
         })
@@ -42,13 +43,13 @@ exports.findAll = (req, res) => {
                     err.message || "Some error occured while retreiving all upgrades!"
             });
         });
-};
+},
 
 //Find a upgrade by ID
-exports.findOne = (req, res) => {
+async findOne(req, res){
     const id = req.params.id;
 
-    Upgrades.findById(id)
+    await Upgrades.findById(id)
         .then(data => {
             if (!data)
             res.status(404).send({ message: "Upgrade not found with id " + id});
@@ -59,10 +60,10 @@ exports.findOne = (req, res) => {
                 .status(500)
                 .send({message: "Error retreiving upgrade with id " + id + " from database!"});
         });
-};
+},
 
 //Update an upgrade by ID
-exports.update = (req, res) => {
+async update(req, res){
     if (!req.body) {
         return res.status(400).send({
             message: "Data to update can not be empty. Nothing to update!"
@@ -71,7 +72,7 @@ exports.update = (req, res) => {
 
     const id = req.params.id;
 
-    Upgrades.findByIdAndUpdate(id, req.body, { useFindAndModify : false})
+    await Upgrades.findByIdAndUpdate(id, req.body, { useFindAndModify : false})
         .then(data => {
             if (!data) {
                 res.status(404).send({
@@ -84,13 +85,13 @@ exports.update = (req, res) => {
                 message: "Error updating upgrade with id " + id + "in database!"
             });
         })
-};
+},
 
 //Delete an upgrade by ID
-exports.delete = (req, res) => {
+async delete(req, res){
     const id = req.params.id;
 
-    Upgrades.findByIdAndRemove(id)
+    await Upgrades.findByIdAndRemove(id)
         .then(data => {
             if (!data) {
                 res.status(404).send({
@@ -107,4 +108,5 @@ exports.delete = (req, res) => {
                 message: "Could not delete Upgrade with id " + id + "! This is a problem with the database connection!"
             });
         });
-};
+},
+}

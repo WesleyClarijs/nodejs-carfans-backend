@@ -8,9 +8,8 @@ const jwt = require('jsonwebtoken')
 const saltRounds = 10;
 
 //Create and save a new User
-exports.create = (req, res) => {
-
-    //Validation with if statements -- TODO
+module.exports = {
+async create(req, res){
 
     //Create a new user
     const user = new db.user({
@@ -25,7 +24,7 @@ exports.create = (req, res) => {
     });
 
     //Save user in the database
-    user
+    await user
         .save(user)
         .then(data => {
             res.send(data);
@@ -36,10 +35,10 @@ exports.create = (req, res) => {
                 err.message || "Some error occured while adding the user to the database!"
             });
         });
-    };
+    },
 
-exports.findAll = (req, res) => {
-    Users.find()
+async findAll(req, res){
+    await Users.find()
         .then(data => {
             res.send(data);
         })
@@ -49,13 +48,13 @@ exports.findAll = (req, res) => {
                     err.message || "Some error occured while retreiving all users from database!"          
             })
         })
-};
+},
 
 //Find a user by ID
-exports.findOne = (req, res) => {
+async findOne(req, res) {
     const id = req.params.id;
 
-    Users.findById(id)
+    await Users.findById(id)
         .then(data => {
             if (!data)
             res.status(404).send({ message: "User not found with id " + id});
@@ -66,10 +65,10 @@ exports.findOne = (req, res) => {
                 .status(500)
                 .send({message: "Error retreiving User with id " + id + " from database!"});
         });
-};
+},
 
 //Update a user by ID
-exports.update = (req, res) => {
+async update(req, res){
     if (!req.body) {
         return res.status(400).send({
             message: "Data to update can not be empty. Nothing to update!"
@@ -78,7 +77,7 @@ exports.update = (req, res) => {
 
     const id = req.params.id;
 
-    Users.findByIdAndUpdate(id, req.body, { useFindAndModify : false})
+    await Users.findByIdAndUpdate(id, req.body, { useFindAndModify : false})
         .then(data => {
             if (!data) {
                 res.status(404).send({
@@ -91,13 +90,13 @@ exports.update = (req, res) => {
                 message: "Error updating user with id " + id + "in database!"
             });
         })
-};
+},
 
 //Delete a user by ID
-exports.delete = (req, res) => {
+async delete(req, res){
     const id = req.params.id;
 
-    Users.findByIdAndRemove(id)
+    await Users.findByIdAndRemove(id)
         .then(data => {
             if (!data) {
                 res.status(404).send({
@@ -114,11 +113,11 @@ exports.delete = (req, res) => {
                 message: "Could not delete User with id " + id + "! This is a problem with the database connection!"
             });
         });
-    };
+    },
 
     //AUTHENTICATION
-exports.login = (req, res) => {
-        Users.findOne({
+async login(req, res){
+        await Users.findOne({
           emailAddress: req.body.email
         }).exec((err, user) => {
           if (err) {
@@ -166,7 +165,7 @@ exports.login = (req, res) => {
 
       },
     
-    exports.validateToken = (req, res, next) => {
+    async validateToken(req, res, next){
         const authHeader = req.headers['authorization'];
         if (!authHeader) {
           console.log("Authorization header missing!");
@@ -195,9 +194,9 @@ exports.login = (req, res) => {
             }
           });
         }
-    }
+    },
 
-        exports.register = (req, res) => {
+        async register(req, res){
             const user = new db.user({
                 userName: req.body.userName,
                 password: bcrypt.hashSync(req.body.password, saltRounds),
@@ -208,7 +207,7 @@ exports.login = (req, res) => {
                 gender: req.body.gender,
                 country: req.body.country
             }) 
-            user.save((err, result) => {
+            await user.save((err, result) => {
                 if (result) {
                     res.status(200).json({
                         result: req.body
@@ -222,6 +221,7 @@ exports.login = (req, res) => {
                   }
             });
         }
+      }
 
 
     

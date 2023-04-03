@@ -2,13 +2,9 @@ const db = require("../models");
 const Cars = db.car;
 
 //Create and save a new Car
-exports.create = (req, res) => {
-  //Validation on request
-  if (!req.body.brand) {
-    res.status(400).send({ message: "brand cannot be empty!" });
-  }
-  //TODO: Add validation for all obligated fields.
-
+module.exports = {
+async create(req, res, next) {
+ 
   //Create a new car
   const car = new db.car({
     user_id: req.body.user_id,
@@ -26,7 +22,7 @@ exports.create = (req, res) => {
   });
 
   //Save car in the database
-  car
+  await car
     .save(car)
     .then((data) => {
       res.send(data);
@@ -38,12 +34,12 @@ exports.create = (req, res) => {
           "Some error occured while adding the car to the database!",
       });
     });
-};
+},
 
 //Retreive all Cars from the database
-exports.findAll = (req, res) => {
+async findAll(req, res, next){
   console.log("findAll");
-  Cars.find()
+  await Cars.find()
     .then((data) => {
       console.log("returning data", data);
       res.status(200).json(data);
@@ -54,13 +50,13 @@ exports.findAll = (req, res) => {
         message: err.message || "Some error occured while retreiving all cars!",
       });
     });
-};
+  },
 
 //Find a car by ID
-exports.findOne = (req, res) => {
+async findOne(req, res, next){
   const id = req.params.id;
 
-  Cars.findById(id)
+  await Cars.findById(id)
     .then((data) => {
       if (!data)
         res.status(404).send({ message: "Car not found with id " + id });
@@ -73,10 +69,10 @@ exports.findOne = (req, res) => {
           message: "Error retreiving Car with id " + id + " from database!",
         });
     });
-};
+},
 
 //Update a car by ID
-exports.update = (req, res) => {
+async update(req, res, next){
   if (!req.body) {
     return res.status(400).send({
       message: "Data to update can not be empty. Nothing to update!",
@@ -85,7 +81,7 @@ exports.update = (req, res) => {
 
   const id = req.params.id;
 
-  Cars.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
+  await Cars.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
     .then((data) => {
       if (!data) {
         res.status(404).send({
@@ -98,13 +94,13 @@ exports.update = (req, res) => {
         message: "Error updating car with id " + id + "in database!",
       });
     });
-};
+},
 
 //Delete a car by ID
-exports.delete = (req, res) => {
+async delete(req, res,next){
   const id = req.params.id;
 
-  Cars.findByIdAndRemove(id)
+  await Cars.findByIdAndRemove(id)
     .then((data) => {
       if (!data) {
         res.status(404).send({
@@ -124,4 +120,5 @@ exports.delete = (req, res) => {
           "! This is a problem with the database connection!",
       });
     });
-};
+  }
+}

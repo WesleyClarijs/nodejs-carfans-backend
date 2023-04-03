@@ -2,7 +2,8 @@ const db = require("../models");
 const Meetings = db.meeting;
 
 //Create and save a new meetings
-exports.create = (req, res) => {
+module.exports = {
+async create(req, res,next){
   //Create a new meetings
   const meeting = new db.meeting({
     location: req.body.location,
@@ -10,7 +11,7 @@ exports.create = (req, res) => {
     organisator: req.body.organisator,
   });
 
-  meeting
+  await meeting
     .save(meeting)
     .then((data) => {
       res.send(data);
@@ -22,11 +23,11 @@ exports.create = (req, res) => {
           "Some error occured while adding the meeting to the database!",
       });
     });
-};
+},
 
 //Retreive all meetingss from the database
-exports.findAll = (req, res) => {
-  Meetings.find()
+async findAll(req, res, next){
+  await Meetings.find()
     .then((data) => {
       res.send(data);
     })
@@ -36,13 +37,13 @@ exports.findAll = (req, res) => {
           err.message || "Some error occured while retreiving all meetings!",
       });
     });
-};
+},
 
 //Find a meetings by ID
-exports.findOne = (req, res) => {
+async findOne(req, res, next){
   const id = req.params.id;
 
-  Meetings.findById(id)
+  await Meetings.findById(id)
     .then((data) => {
       if (!data)
         res.status(404).send({ message: "Meeting not found with id " + id });
@@ -53,9 +54,9 @@ exports.findOne = (req, res) => {
         message: "Error retreiving meeting with id " + id + " from database!",
       });
     });
-};
+},
 
-exports.update = (req, res) => {
+async update(req, res, next) {
   if (!req.body) {
     return res.status(400).send({
       message: "Data to update can not be empty. Nothing to update!",
@@ -64,7 +65,7 @@ exports.update = (req, res) => {
 
   const id = req.params.id;
 
-  Meetings.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
+  await Meetings.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
     .then((data) => {
       if (!data) {
         res.status(404).send({
@@ -78,13 +79,13 @@ exports.update = (req, res) => {
         message: "Error updating meetings with id " + id + "in database!",
       });
     });
-};
+},
 
 //Delete an meetings by ID
-exports.delete = (req, res) => {
+async delete(req, res, next){
   const id = req.params.id;
 
-  Meetings.findByIdAndRemove(id)
+  await Meetings.findByIdAndRemove(id)
     .then((data) => {
       if (!data) {
         res.status(404).send({
@@ -107,4 +108,5 @@ exports.delete = (req, res) => {
           "! This is a problem with the database connection!",
       });
     });
-};
+}
+}
