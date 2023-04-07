@@ -53,6 +53,7 @@ async findAll(req, res){
 //Find a user by ID
 async findOne(req, res) {
     const id = req.params.id;
+    console.log(req.params.id)
 
     await Users.findById(id)
         .then(data => {
@@ -117,8 +118,9 @@ async delete(req, res){
 
     //AUTHENTICATION
 async login(req, res){
+        console.log(req.body)
         await Users.findOne({
-          emailAddress: req.body.email
+          emailAddress: req.body.emailAddress
         }).exec((err, user) => {
           if (err) {
             res.status(500)
@@ -133,7 +135,7 @@ async login(req, res){
                 message: "gebruiker niet gevonden."
               });
           }
-    
+          console.log(user.password)
           //comparing passwords
           var passwordIsValid = bcrypt.compareSync(
             req.body.password,
@@ -149,7 +151,6 @@ async login(req, res){
           }
           //signing token with user id
           var token = jwt.sign({id: user.id}, jwtSecretKey, { expiresIn: "2h" })
-          
           //responding to client request with user profile success message and  access token .
           res.status(200)
             .send({

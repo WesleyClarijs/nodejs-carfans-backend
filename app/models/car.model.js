@@ -1,5 +1,7 @@
 const { Schema } = require("mongoose");
 const { mongoose } = require(".");
+const repairModel = require("./repair.model");
+const upgradeModel = require("./upgrade.model");
 
 module.exports = (mongoose) => {
   var schema = mongoose.Schema(
@@ -14,6 +16,8 @@ module.exports = (mongoose) => {
       productionYear: Number,
       isCurrentlyDriveable: Boolean,
       isDailyCar: Boolean,
+      repairs: { type: [repairModel.Schema], default: [] },
+      upgradeModel: { type: [upgradeModel.Schema], default: [] },
     },
     { timestaps: true }
   );

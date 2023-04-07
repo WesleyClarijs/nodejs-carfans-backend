@@ -1,4 +1,5 @@
 const { mongoose } = require(".");
+const { Schema } = require("mongoose");
 const carModel = require("./car.model");
 
 module.exports = mongoose => {
@@ -25,4 +26,4 @@ module.exports = mongoose => {
 
     const User = mongoose.model("user", schema);
     return User;
-}
+};

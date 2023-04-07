@@ -1,13 +1,14 @@
 const db = require("../models");
 const Repairs = db.repair;
+const Cars = db.car;
 
 //Create and save a new repair
 module.exports = {
 async create(req, res,next) {
   //Create a new repair
   const repair = new db.repair({
-    car_id: req.body.car_id,
-    user_id: req.body.user_id,
+    car_id: req.params.carId,
+    user_id: req.params.userId,
     subject: req.body.subject,
     description: req.body.description,
     isMechanicalProblem: req.body.isMechanicalProblem
@@ -21,6 +22,16 @@ async create(req, res,next) {
   });
 
   //Save repair in the database
+
+  carInRepair = await Cars.findOne(req.params.carId)
+
+  if (carInRepair == undefined || carInRepair == null) {
+    res.status(404).send("Car not found")
+  }
+  if (carInRepair.user_id != req.params.userId) {
+    res.status(403).send("User is not allowed access")
+  }
+
   await repair
     .save(repair)
     .then((data) => {
@@ -33,6 +44,19 @@ async create(req, res,next) {
           "Some error occured while adding the repair to the database!",
       });
     });
+
+    try {
+      await Cars.updateOne(
+        {_id : req.params.carId},
+        {
+          $push: {
+            repairs: repair,
+          },
+        },
+      )
+    } catch (err) {
+      res.status(500).send("Something went wrong");
+    }
 },
 
 //Retreive all repairs from the database

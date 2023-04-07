@@ -1,5 +1,8 @@
 const db = require("../models");
+const repairModel = require("../models/repair.model");
+const upgradeModel = require("../models/upgrade.model");
 const Cars = db.car;
+const User = db.user
 
 //Create and save a new Car
 module.exports = {
@@ -7,7 +10,7 @@ async create(req, res, next) {
  
   //Create a new car
   const car = new db.car({
-    user_id: req.body.user_id,
+    user_id: req.params.userId,
     brand: req.body.brand,
     model: req.body.model,
     colour: req.body.colour,
@@ -19,6 +22,8 @@ async create(req, res, next) {
       ? req.body.isCurrentlyDriveable
       : true,
     isDailyCar: req.body.isDailyCar ? req.body.isDailyCar : true,
+    repairs: { type: [repairModel.Schema], default : [] },
+    upgrades: { type: [upgradeModel.Schema], default : [] }
   });
 
   //Save car in the database
@@ -34,6 +39,20 @@ async create(req, res, next) {
           "Some error occured while adding the car to the database!",
       });
     });
+
+    try {
+      await User.updateOne(
+        {_id : req.params.userId},
+        {
+          $push: {
+            cars : car,
+          },
+        },
+        {runValidators : true}
+      )
+    } catch (err) {
+      res.status(500).send("Something went wrong");
+    }
 },
 
 //Retreive all Cars from the database
@@ -73,6 +92,12 @@ async findOne(req, res, next){
 
 //Update a car by ID
 async update(req, res, next){
+  const userId = req.params.userId;
+
+  if (userId != req.user_id) {
+    return res.status(403).send("User is not allowed access");
+  }
+
   if (!req.body) {
     return res.status(400).send({
       message: "Data to update can not be empty. Nothing to update!",
@@ -99,6 +124,11 @@ async update(req, res, next){
 //Delete a car by ID
 async delete(req, res,next){
   const id = req.params.id;
+  const userId = req.params.userId;
+
+  if (userId != req.user_id) {
+    return res.status(403).send("User is not allowed access");
+  }
 
   await Cars.findByIdAndRemove(id)
     .then((data) => {

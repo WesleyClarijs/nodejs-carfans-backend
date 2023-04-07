@@ -1,23 +1,23 @@
 module.exports = app => {
     const repairs = require("../controllers/repair.controller.js");
-
+    const authenticate = require("../middleware/authenticate.js")
     var router = require("express").Router();
 
     //Create a new repair
-    router.post("/", repairs.create);
+    router.post("/users/:userId/cars/:carId/repairs", authenticate, repairs.create);
 
     //Retreive all repairs
-    router.get("/", repairs.findAll);
+    router.get("/repairs", repairs.findAll);
 
     //Retreive repair by id
     router.get("/:id", repairs.findOne);
 
     //Update repair by id
-    router.put("/:id", repairs.update);
+    router.put("/users/:userId/cars/:carId/repairs/:id", repairs.update);
 
     //Delete repair by id
-    router.delete("/:id", repairs.delete);
+    router.delete("/users/:userId/cars/:carId/repairs/:id", repairs.delete);
 
-    app.use('/api/repairs', router);
+    app.use('/api', router);
 };
 
