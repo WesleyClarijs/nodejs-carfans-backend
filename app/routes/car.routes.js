@@ -10,15 +10,13 @@ module.exports = app => {
     router.get("/cars", cars.findAll);
 
     //Retreive car by id
-    router.get("/cars/:id", cars.findOne);
-
-    //router.get("/users/:id/cars", cars.findAll)
+    router.get("/cars/:carId", cars.findOne);
 
     //Update car by id
-    router.put("/users/:userId/cars/:id", authenticate, cars.update);
+    router.put("/users/:userId/cars/:carId", authenticate, cars.update);
 
     //Delete car by id
-    router.delete("users/:userId/cars:id",authenticate, cars.delete);
+    router.delete("/users/:userId/cars/:carId",authenticate, cars.delete);
 
     app.use('/api', router);
 };

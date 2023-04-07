@@ -1,5 +1,4 @@
 const neo4j = require("neo4j-driver");
-// require('dotenv').config()
 
 module.exports = {
   connect(dbName) {
@@ -17,15 +16,18 @@ module.exports = {
     });
   },
 
-  // dropAll: "MATCH (n) DETACH DELETE n",
-  // // start following a trainer.
-  // follow:
-  //   "MERGE (follower:User {id:$followerId}) MERGE (trainer:Trainer {id: $trainerId}) MERGE (follower)-[:FOLLOWS]->(trainer)",
-  // // start unfollowing a user.
-  // unfollow:
-  //   "MATCH((follower:User{id:$followerId})-[r:FOLLOWS]->(trainer:Trainer{id: $trainerId})) DELETE r",
-  // // return all trainers that one user follows.
-  // isFollowing:
-  //   "MATCH((follower:User{id:$followerId})-[:FOLLOWS]->(trainer)) RETURN collect(DISTINCT trainer.id) as trainerIds",
+  dropAll: "MATCH (n) DETACH DELETE n",
+  // create a user.
+  create:
+  "CREATE (n:User {id: $id, userName: $userName})",
+  // start following a user.
+  follow:
+    "MERGE (follower:User {id:$followerId}) MERGE (user:User {id: $userId}) MERGE (follower)-[:FOLLOWS]->(user)",
+  // start unfollowing a user.
+  unfollow:
+    "MATCH((follower:User{id:$followerId})-[r:FOLLOWS]->(user:User{id: $userId})) DELETE r",
+  // return all users that one user follows.
+  isFollowing:
+    "MATCH((follower:User{id:$followerId})-[:FOLLOWS]->(user)) RETURN collect(DISTINCT user.id) as userIds",
 };
 

@@ -4,7 +4,8 @@ const { user } = require("../models");
 const Users = db.user;
 const bcrypt = require('bcrypt');
 const jwtSecretKey = require('../config/db.config').jwtSecretKey
-const jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken');
+const neo = require("../../neo");
 const saltRounds = 10;
 
 //Create and save a new User
@@ -35,6 +36,7 @@ async create(req, res){
                 err.message || "Some error occured while adding the user to the database!"
             });
         });
+    
     },
 
 async findAll(req, res){
@@ -84,7 +86,7 @@ async update(req, res){
                 res.status(404).send({
                     message: "Cannot update User with id " + id + ". User not found!"
                 });
-            } else res.send({ message: "Car was updated successfully!"});
+            } else res.send({ message: "User was updated successfully!"});
         })
         .catch(err => {
             res.status(500).send({
@@ -101,7 +103,7 @@ async delete(req, res){
         .then(data => {
             if (!data) {
                 res.status(404).send({
-                    message: "Can not delete Car with id " + id + ". User was not found!"
+                    message: "Can not delete User with id " + id + ". User was not found!"
                 });
             } else {
                 res.send({
@@ -132,7 +134,7 @@ async login(req, res){
           if (!user) {
             return res.status(404)
               .send({
-                message: "gebruiker niet gevonden."
+                message: "User not found!"
               });
           }
           console.log(user.password)
@@ -208,6 +210,13 @@ async login(req, res){
                 gender: req.body.gender,
                 country: req.body.country
             }) 
+
+            doubleUser = await Users.findOne({emailAddress: req.body.emailAddress})
+            
+            if (doubleUser != null || doubleUser != undefined) {
+              res.status(403).send("An other user already uses this email address")
+            } else {
+
             await user.save((err, result) => {
                 if (result) {
                     res.status(200).json({
@@ -221,6 +230,17 @@ async login(req, res){
                       });
                   }
             });
+              userToNeo = await Users.findOne({emailAddress : req.body.emailAddress});
+          
+              const session = neo.session();
+          
+              await session.run(neo.create, {
+                id: userToNeo._id.toString(),
+                userName: userToNeo.userName.toString()
+              });
+
+              session.close();
+            }
         }
       }
 

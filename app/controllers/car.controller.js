@@ -22,8 +22,6 @@ async create(req, res, next) {
       ? req.body.isCurrentlyDriveable
       : true,
     isDailyCar: req.body.isDailyCar ? req.body.isDailyCar : true,
-    repairs: { type: [repairModel.Schema], default : [] },
-    upgrades: { type: [upgradeModel.Schema], default : [] }
   });
 
   //Save car in the database
@@ -73,7 +71,7 @@ async findAll(req, res, next){
 
 //Find a car by ID
 async findOne(req, res, next){
-  const id = req.params.id;
+  const id = req.params.carId;
 
   await Cars.findById(id)
     .then((data) => {
@@ -93,8 +91,14 @@ async findOne(req, res, next){
 //Update a car by ID
 async update(req, res, next){
   const userId = req.params.userId;
+  const id = req.params.carId;
+  const car = await Cars.findOne({_id : id})
 
-  if (userId != req.user_id) {
+  console.log(userId)
+  console.log(id)
+  console.log(car.user_id)
+
+  if (userId != car.user_id) {
     return res.status(403).send("User is not allowed access");
   }
 
@@ -103,8 +107,6 @@ async update(req, res, next){
       message: "Data to update can not be empty. Nothing to update!",
     });
   }
-
-  const id = req.params.id;
 
   await Cars.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
     .then((data) => {
@@ -119,14 +121,31 @@ async update(req, res, next){
         message: "Error updating car with id " + id + "in database!",
       });
     });
+
+    //TODO Fix this
+    // try {
+    //   await User.updateOne(
+    //     { _id : userId },
+    //     {
+    //       $set : {
+    //         cars : req.body
+    //       },
+    //     },
+    //     { runValidators : true }
+    //   )
+    // } catch (err) {
+    //   res.status(500).send("Something went wrong")
+    // }
 },
 
 //Delete a car by ID
 async delete(req, res,next){
-  const id = req.params.id;
+  const id = req.params.carId;
   const userId = req.params.userId;
+  const car = await Cars.findOne({ _id : id})
 
-  if (userId != req.user_id) {
+
+  if (userId != car.user_id) {
     return res.status(403).send("User is not allowed access");
   }
 
@@ -150,5 +169,18 @@ async delete(req, res,next){
           "! This is a problem with the database connection!",
       });
     });
+    try {
+      await User.updateOne(
+        { _id: userId},
+        {
+          $pull: {
+            Cars: req.body,
+          },
+        },
+        { runValidators: true}
+      )
+    } catch (err) {
+      res.status(500).send("Something went wrong in the query.")
+    }
   }
 }

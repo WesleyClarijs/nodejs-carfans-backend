@@ -17,7 +17,7 @@ module.exports = (mongoose) => {
       isCurrentlyDriveable: Boolean,
       isDailyCar: Boolean,
       repairs: { type: [repairModel.Schema], default: [] },
-      upgradeModel: { type: [upgradeModel.Schema], default: [] },
+      upgrades: { type: [upgradeModel.Schema], default: [] },
     },
     { timestaps: true }
   );
