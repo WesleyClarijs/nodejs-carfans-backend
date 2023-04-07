@@ -218,11 +218,6 @@ async login(req, res){
             } else {
 
             await user.save((err, result) => {
-                if (result) {
-                    res.status(200).json({
-                        result: req.body
-                    })
-                  }
                 if (err) {
                     res.status(400).json({
                         message: "Failed getting connection!",
@@ -230,16 +225,19 @@ async login(req, res){
                       });
                   }
             });
-              userToNeo = await Users.findOne({emailAddress : req.body.emailAddress});
-          
+            try {
               const session = neo.session();
           
               await session.run(neo.create, {
-                id: userToNeo._id.toString(),
-                userName: userToNeo.userName.toString()
+                emailAddress: req.body.emailAddress.toString(),
+                userName: req.body.userName.toString()
               });
 
               session.close();
+              res.status(200).send("User created in both databases")
+            } catch (err) {
+              res.status(500).send("Something went wrong while creating user in Neo")
+            }
             }
         }
       }
