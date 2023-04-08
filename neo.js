@@ -19,10 +19,10 @@ module.exports = {
   dropAll: "MATCH (n) DETACH DELETE n",
   // create a user.
   create:
-  "CREATE (n:User {emailAddress: $emailAddress, userName: $userName})",
+  "CREATE (n:User {mongoId : $mongoId, emailAddress: $emailAddress, userName: $userName})",
   // start following a user.
   follow:
-    "MERGE (follower:User {id:$followerId}) MERGE (user:User {id: $userId}) MERGE (follower)-[:FOLLOWS]->(user)",
+    "MERGE (follower:User {mongoId:$followerId}) MERGE (user:User {mongoId: $userId}) MERGE (follower)-[:FOLLOWS]->(user)",
   // start unfollowing a user.
   unfollow:
     "MATCH((follower:User{id:$followerId})-[r:FOLLOWS]->(user:User{id: $userId})) DELETE r",

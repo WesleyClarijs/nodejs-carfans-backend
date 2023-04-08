@@ -31,6 +31,7 @@ require("./app/routes/car.routes")(app);
 require("./app/routes/user.routes")(app);
 require("./app/routes/repair.routes")(app);
 require("./app/routes/upgrade.routes")(app);
+require("./app/routes/follow.routes")(app);
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {

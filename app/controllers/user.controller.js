@@ -229,6 +229,7 @@ async login(req, res){
               const session = neo.session();
           
               await session.run(neo.create, {
+                mongoId : user._id.toString(),
                 emailAddress: req.body.emailAddress.toString(),
                 userName: req.body.userName.toString()
               });
