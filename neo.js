@@ -5,11 +5,11 @@ module.exports = {
     this.dbName = dbName;
     this.driver = driver = neo4j.driver(
       //LOCAL DB
-      "bolt://localhost:7687",
-      neo4j.auth.basic("neo4j", "wesley123")
+      //"bolt://localhost:7687",
+      //neo4j.auth.basic("neo4j", "wesley123")
       // ONLINE DB
-      //"bolt://localhost:7687"
-      //neo4j.auth.basic("neo4j", "Y2jos6MpDgzUcb-ybwBBeexXQeyfvDETjMLgdyFaQ9Y")
+      "bolt+s://c350b056.databases.neo4j.io:7687",
+      neo4j.auth.basic("neo4j", "Y2jos6MpDgzUcb-ybwBBeexXQeyfvDETjMLgdyFaQ9Y")
     );
   },
 

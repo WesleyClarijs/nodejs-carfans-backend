@@ -38,4 +38,4 @@ app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}.`);
 });
 
-connect.neo("carfansdb")
+connect.neo("neo4j")
