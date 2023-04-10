@@ -1,19 +1,47 @@
-const { Schema } = require("mongoose");
-const { mongoose } = require(".");
+var mongoose = require("mongoose");
 
-module.exports = (mongoose) => {
   var schema = mongoose.Schema(
     {
-      car_id: String,
-      user_id: String,
-      subject: String,
-      description: String,
-      isMechanicalProblem: Boolean,
-      problemSince: Date,
-      isRepaired: Boolean,
-      costs: Number,
-      solution: String,
-      problemSolvedAt: Date,
+      car_id: {
+        type : String, 
+        required : true,
+      },
+      user_id: {
+        type : String, 
+        required : true,
+      },
+      subject: {
+        type : String, 
+        required : true,
+      },
+      description: {
+        type : String, 
+        required : true,
+      },
+      isMechanicalProblem: {
+        type : Boolean, 
+        required : true,
+      },
+      problemSince: {
+        type : Date, 
+        required : true,
+      },
+      isRepaired: {
+        type : Boolean, 
+        required : true,
+      },
+      costs: {
+        type : Number, 
+        required : false,
+      },
+      solution: {
+        type : String, 
+        required : false,
+      },
+      problemSolvedAt: {
+        type : Date, 
+        required : false,
+      },
     },
     { timestaps: true }
   );
@@ -24,6 +52,7 @@ module.exports = (mongoose) => {
     return object;
   });
 
-  const Repair = mongoose.model("repair", schema);
-  return Repair;
-};
+  // const Repair = mongoose.model("repair", schema);
+  // return Repair;
+
+  module.exports = mongoose.model("repair", schema);

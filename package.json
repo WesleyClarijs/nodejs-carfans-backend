@@ -11,15 +11,20 @@
     "api"
   ],
   "scripts": {
+    "test": "mocha --watch \"./**/*spec.js\" --reporter min --timeout 10000",
     "start": "nodemon server.js"
   },
   "author": "Wesley Clarijs",
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.0.1",
+    "chai": "^4.3.7",
+    "chai-as-promised": "^7.1.1",
+    "chai-http": "^4.3.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
+    "mocha": "^10.2.0",
     "mongoose": "^6.0.13",
     "neo4j-driver": "^5.7.0",
     "nodemon": "^2.0.22"

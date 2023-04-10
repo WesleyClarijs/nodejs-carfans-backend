@@ -24,6 +24,13 @@ async create(req, res, next) {
     isDailyCar: req.body.isDailyCar ? req.body.isDailyCar : true,
   });
 
+  const user = await User.findOne({_id : req.params.userId})
+  console.log(user)
+
+  if (user == null || user == undefined) {
+    res.status(404).send("User does not exist")
+  } else {
+
   //Save car in the database
   await car
     .save(car)
@@ -51,6 +58,7 @@ async create(req, res, next) {
     } catch (err) {
       res.status(500).send("Something went wrong");
     }
+  }
 },
 
 //Retreive all Cars from the database

@@ -1,12 +1,13 @@
 const db = require("../models");
 const Repairs = db.repair;
 const Cars = db.car;
+const Repair = require("../models/repair.model")
 
 //Create and save a new repair
 module.exports = {
 async create(req, res,next) {
   //Create a new repair
-  const repair = new db.repair({
+  const repair = new Repair({
     car_id: req.params.carId,
     user_id: req.params.userId,
     subject: req.body.subject,
@@ -23,14 +24,14 @@ async create(req, res,next) {
 
   //Save repair in the database
 
-  carInRepair = await Cars.findOne(req.params.carId)
+  carInRepair = await Cars.findOne({_id : req.params.carId})
 
   if (carInRepair == undefined || carInRepair == null) {
     res.status(404).send("Car not found")
   }
-  if (carInRepair.user_id != req.params.userId) {
-    res.status(403).send("User is not allowed access")
-  }
+  else if (carInRepair.user_id != req.params.userId) {
+    res.status(403).send("User is not allowed to use this car")
+  } else {
 
   await repair
     .save(repair)
@@ -57,11 +58,12 @@ async create(req, res,next) {
     } catch (err) {
       res.status(500).send("Something went wrong");
     }
+  }
 },
 
 //Retreive all repairs from the database
 async findAll(req, res, next){
-  await Repairs.find()
+  await Repair.find()
     .then((data) => {
       res.send(data);
     })
@@ -75,9 +77,9 @@ async findAll(req, res, next){
 
 //Find a repair by ID
 async findOne(req, res, next){
-  const id = req.params.id;
+  const id = req.params.repairId;
 
-  await Repairs.findById(id)
+  await Repair.findById(id)
     .then((data) => {
       if (!data)
         res.status(404).send({ message: "Repair not found with id " + id });
@@ -94,34 +96,52 @@ async findOne(req, res, next){
 
 //Update a repair by ID
 async update(req, res, next){
-  if (!req.body) {
+  const userId = req.params.userId;
+  const repairId = req.params.repairId;
+  const car = await Cars.findOne({_id: id});
+
+  if (userId != car.user_id) {
+    return res.status(403).send("User is not allowed access");
+  }
+
+  else if (!req.body) {
     return res.status(400).send({
       message: "Data to update can not be empty. Nothing to update!",
     });
-  }
+  } else {
 
-  const id = req.params.id;
-
-  await Repairs.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
+  await Repair.findByIdAndUpdate(repairId, req.body, { useFindAndModify: false })
     .then((data) => {
       if (!data) {
         res.status(404).send({
-          message: "Cannot update Repair with id " + id + ". Repair not found!",
+          message: "Cannot update Repair with id " + repairId + ". Repair not found!",
         });
       } else res.send({ message: "Repair was updated successfully!" });
     })
     .catch((err) => {
       res.status(500).send({
-        message: "Error updating repair with id " + id + "in database!",
+        message: "Error updating repair with id " + repairId + "in database!",
       });
     });
+  }
 },
 
 //Delete a repair by ID
 async delete(req, res){
-  const id = req.params.id;
+  const id = req.params.repairId;
+  const userId = req.params.userId;
+  const carId = req.params.carId;
+  const car = await Cars.findOne({_id: carId});
 
-  await Repairs.findByIdAndRemove(id)
+  if (car == null || car == undefined) {
+    return res.status(404).send("Car not found")
+  }
+
+  if (userId != car.user_id) {
+    return res.status(403).send("User is not allowed access");
+  } else {
+
+  await Repair.findByIdAndRemove(id)
     .then((data) => {
       if (!data) {
         res.status(404).send({
@@ -142,5 +162,6 @@ async delete(req, res){
           "! This is a problem with the database connection!",
       });
     });
+  }
 },
 }

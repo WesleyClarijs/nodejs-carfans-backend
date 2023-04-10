@@ -10,13 +10,13 @@ module.exports = app => {
     router.get("/repairs", repairs.findAll);
 
     //Retreive repair by id
-    router.get("/:id", repairs.findOne);
+    router.get("/repairs/:repairId", repairs.findOne);
 
     //Update repair by id
-    router.put("/users/:userId/cars/:carId/repairs/:id", repairs.update);
+    router.put("/users/:userId/cars/:carId/repairs/repairId", authenticate, repairs.update);
 
     //Delete repair by id
-    router.delete("/users/:userId/cars/:carId/repairs/:id", repairs.delete);
+    router.delete("/users/:userId/cars/:carId/repairs/:repairId", authenticate, repairs.delete);
 
     app.use('/api', router);
 };

@@ -4,8 +4,12 @@ module.exports = {
   connect(dbName) {
     this.dbName = dbName;
     this.driver = driver = neo4j.driver(
+      //LOCAL DB
       "bolt://localhost:7687",
       neo4j.auth.basic("neo4j", "wesley123")
+      // ONLINE DB
+      //"bolt://localhost:7687"
+      //neo4j.auth.basic("neo4j", "Y2jos6MpDgzUcb-ybwBBeexXQeyfvDETjMLgdyFaQ9Y")
     );
   },
 
@@ -19,15 +23,14 @@ module.exports = {
   dropAll: "MATCH (n) DETACH DELETE n",
   // create a user.
   create:
-  "CREATE (n:User {mongoId : $mongoId, emailAddress: $emailAddress, userName: $userName})",
+    "CREATE (n:User {mongoId : $mongoId, emailAddress: $emailAddress, userName: $userName})",
   // start following a user.
   follow:
     "MERGE (follower:User {mongoId:$followerId}) MERGE (user:User {mongoId: $userId}) MERGE (follower)-[:FOLLOWS]->(user)",
   // start unfollowing a user.
   unfollow:
-    "MATCH((follower:User{id:$followerId})-[r:FOLLOWS]->(user:User{id: $userId})) DELETE r",
+    "MATCH((follower:User{mongoId:$userId})-[r:FOLLOWS]->(user:User{mongoId: $userToUnfollowId})) DELETE r",
   // return all users that one user follows.
   isFollowing:
-    "MATCH((follower:User{id:$followerId})-[:FOLLOWS]->(user)) RETURN collect(DISTINCT user.id) as userIds",
+    "MATCH((follower:User{mongoId:$followerId})-[:FOLLOWS]->(user)) RETURN collect(DISTINCT user.mongoId) as userIds",
 };
-
