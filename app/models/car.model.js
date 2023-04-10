@@ -1,10 +1,15 @@
-const { Schema } = require("mongoose");
-const { mongoose } = require(".");
+const Mongoose = require("mongoose");
+const Schema = Mongoose.Schema;
+const repairModel = require("./repair.model");
+const upgradeModel = require("./upgrade.model");
 
 module.exports = (mongoose) => {
-  var schema = mongoose.Schema(
+  var schema = new Schema(
     {
-      user_id: String,
+      user_id: {
+        type: Mongoose.Schema.Types.ObjectId,
+        ref : "User"
+      },
       brand: String,
       model: String,
       colour: String,
@@ -14,6 +19,8 @@ module.exports = (mongoose) => {
       productionYear: Number,
       isCurrentlyDriveable: Boolean,
       isDailyCar: Boolean,
+      repairs: { type: [repairModel.Schema], required: false},
+      upgrades: { type: [upgradeModel.Schema], required: false }
     },
     { timestaps: true }
   );
@@ -26,4 +33,5 @@ module.exports = (mongoose) => {
 
   const Car = mongoose.model("car", schema);
   return Car;
-};
+}
+

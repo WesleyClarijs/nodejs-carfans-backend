@@ -1,9 +1,8 @@
 const express = require("express");
 const cors = require("cors");
-
 const app = express();
-
 const db = require("./app/models");
+const connect = require('./connect')
 
 db.mongoose
   .connect(db.url, {
@@ -32,9 +31,11 @@ require("./app/routes/car.routes")(app);
 require("./app/routes/user.routes")(app);
 require("./app/routes/repair.routes")(app);
 require("./app/routes/upgrade.routes")(app);
-require("./app/routes/meeting.routes")(app);
+require("./app/routes/follow.routes")(app);
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}.`);
 });
+
+connect.neo("carfansdb")

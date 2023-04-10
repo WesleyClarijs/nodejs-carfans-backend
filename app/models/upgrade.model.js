@@ -3,12 +3,30 @@ const { mongoose } = require(".");
 module.exports = (mongoose) => {
   var schema = mongoose.Schema(
     {
-      car_id: String,
-      user_id: String,
-      subject: String,
-      description: String,
-      category: String,
-      costs: Number,
+      car_id:  {
+        type : String, 
+        required : true,
+      },
+      user_id: { 
+        type: String, 
+        required : true, 
+      },
+      subject: { 
+        type: String, 
+        required : true, 
+      },
+      description: { 
+        type: String, 
+        required : true, 
+      },
+      category: { 
+        type: String, 
+        required : true, 
+      },
+      costs: { 
+        type: Number, 
+        required : true, 
+      },
       isDone: Boolean,
       date: Date,
     },

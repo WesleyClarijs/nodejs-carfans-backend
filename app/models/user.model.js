@@ -1,4 +1,5 @@
 const { mongoose } = require(".");
+const { Schema } = require("mongoose");
 const carModel = require("./car.model");
 
 module.exports = mongoose => {
@@ -8,7 +9,7 @@ module.exports = mongoose => {
               password: { type: String, required: false},  
               firstName: String,
               lastName: String,
-              emailAddress: { type: String, required: false},
+              emailAddress: { type: String, unique: true},
               dateOfBirth: String,
               gender: String,
               country: String,
@@ -25,4 +26,4 @@ module.exports = mongoose => {
 
     const User = mongoose.model("user", schema);
     return User;
-}
+};
